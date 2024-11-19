@@ -7,6 +7,8 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] private float attackCooldown = 1f; // Cooldown time between attacks
     [SerializeField] private Transform firePoint;       // The fire point where fireballs will appear
     [SerializeField] private GameObject[] fireballs;    // Array to hold fireball game objects
+    
+
 
     private Animator anim;
     private float cooldownTimer = Mathf.Infinity;

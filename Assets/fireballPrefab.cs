@@ -15,15 +15,9 @@ public class Projectile : MonoBehaviour
     anim = GetComponent<Animator>();
     if (anim == null)
     {
-        Debug.LogError("Animator component is missing on " + gameObject.name);
-    }
-    boxCollider = GetComponent<BoxCollider2D>();
-    if (boxCollider == null)
-    {
-        Debug.LogError("BoxCollider2D component missing on " + gameObject.name);
+        Debug.LogError("Animator is null in Awake for " + gameObject.name);
     }
 }
-
 
     private void Update()
     {
@@ -43,33 +37,27 @@ public class Projectile : MonoBehaviour
         anim.SetTrigger("explode");
     }
 
-    public void SetDirection(float _direction)
+  public void SetDirection(float _direction)
+{
+    lifetime = 0;
+    direction = _direction;
+    gameObject.SetActive(true);
+    hit = false;
+
+    if (anim == null)
     {
-        // Debug to check if components are missing
-        if (anim == null)
-        {
-            Debug.LogError("Animator is null in SetDirection for " + gameObject.name);
-            return;
-        }
-
-        if (boxCollider == null)
-        {
-            Debug.LogError("BoxCollider2D is null in SetDirection for " + gameObject.name);
-            return;
-        }
-
-        lifetime = 0;
-        direction = _direction;
-        gameObject.SetActive(true);
-        hit = false;
-        boxCollider.enabled = true;
-
-        float localScaleX = transform.localScale.x;
-        if (Mathf.Sign(localScaleX) != _direction)
-            localScaleX = -localScaleX;
-
-        transform.localScale = new Vector3(localScaleX, transform.localScale.y, transform.localScale.z);
+        Debug.LogError("Animator is null in SetDirection for " + gameObject.name);
+        return; // Stop execution if Animator is null
     }
+
+    boxCollider.enabled = true;
+
+    float localScaleX = transform.localScale.x;
+    if (Mathf.Sign(localScaleX) != _direction)
+        localScaleX = -localScaleX;
+
+    transform.localScale = new Vector3(localScaleX, transform.localScale.y, transform.localScale.z);
+}
 
     private void Deactivate()
     {
