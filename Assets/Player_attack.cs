@@ -39,6 +39,11 @@ public class PlayerAttack : MonoBehaviour
         // Get a fireball from the pool (array of fireballs)
         int fireballIndex = FindFireball();
 
+        Debug.Log("FirePoint position: " + firePoint.position);
+
+Debug.Log("firePoint position: " + firePoint.position);
+Debug.Log("Fireball index: " + fireballIndex + ", activeSelf: " + fireballs[fireballIndex].activeSelf);
+
         if (fireballIndex != -1)
         {
             // Set fireball's position to the fire point
