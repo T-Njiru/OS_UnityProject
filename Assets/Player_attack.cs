@@ -7,7 +7,7 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] private float attackCooldown = 1f; // Cooldown time between attacks
     [SerializeField] private Transform firePoint;       // The fire point where fireballs will appear
     [SerializeField] private GameObject[] fireballs;    // Array to hold fireball game objects
-    
+
 
 
     private Animator anim;
@@ -38,6 +38,11 @@ public class PlayerAttack : MonoBehaviour
 
         // Get a fireball from the pool (array of fireballs)
         int fireballIndex = FindFireball();
+
+        Debug.Log("FirePoint position: " + firePoint.position);
+
+        Debug.Log("firePoint position: " + firePoint.position);
+        Debug.Log("Fireball index: " + fireballIndex + ", activeSelf: " + fireballs[fireballIndex].activeSelf);
 
         if (fireballIndex != -1)
         {
