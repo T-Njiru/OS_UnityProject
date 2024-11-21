@@ -80,4 +80,8 @@ public class Projectile : MonoBehaviour
 
         transform.localScale = new Vector3(localScaleX, transform.localScale.y, transform.localScale.z);
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> aa4a99484d885c4c680e7bbbe9ec020987ae843c

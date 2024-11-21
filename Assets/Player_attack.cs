@@ -41,8 +41,13 @@ public class PlayerAttack : MonoBehaviour
 
         Debug.Log("FirePoint position: " + firePoint.position);
 
+<<<<<<< HEAD
         Debug.Log("firePoint position: " + firePoint.position);
         Debug.Log("Fireball index: " + fireballIndex + ", activeSelf: " + fireballs[fireballIndex].activeSelf);
+=======
+Debug.Log("firePoint position: " + firePoint.position);
+Debug.Log("Fireball index: " + fireballIndex + ", activeSelf: " + fireballs[fireballIndex].activeSelf);
+>>>>>>> aa4a99484d885c4c680e7bbbe9ec020987ae843c
 
         if (fireballIndex != -1)
         {

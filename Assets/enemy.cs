@@ -27,9 +27,17 @@ public class Enemy : MonoBehaviour
         }
     }
     public int GetHealth()
+<<<<<<< HEAD
     {
         return health;
     }
 
+=======
+{
+    return health;
+>>>>>>> aa4a99484d885c4c680e7bbbe9ec020987ae843c
 }
+
+}
+
 

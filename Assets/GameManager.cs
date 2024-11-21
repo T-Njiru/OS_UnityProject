@@ -1,40 +1,71 @@
 using UnityEngine;
+using System.Collections;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager instance;
+    public GameObject[] enemies; // Array of all enemies in the scene
+    public GameObject fireballPrefab; // Reference to the fireball prefab
+    private float[] enemyTimes; // Array to store the time each enemy takes to die
 
-    private int score;
-
-    private void Awake()
+    // Start is called before the first frame update
+    void Start()
     {
-        if (instance == null)
+        // Ensure enemies and fireballPrefab are properly assigned
+        if (enemies == null || enemies.Length == 0 || fireballPrefab == null)
         {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
+            Debug.LogError("Enemies or Fireball Prefab not assigned in GameManager!");
+            return;
         }
-        else
+
+        // Initialize the array to store times
+        enemyTimes = new float[enemies.Length];
+        
+        // Show enemy times (just for testing)
+        for (int i = 0; i < enemies.Length; i++)
         {
-            Destroy(gameObject);
+            enemyTimes[i] = 0f; // Initialize all times to 0 for now
+            Debug.Log("Enemy " + i + " initialized with time: " + enemyTimes[i]);
+        }
+        
+        // Start simulating the firing
+        FireAtEnemies();
+    }
+
+    void FireAtEnemies()
+    {
+        for (int i = 0; i < enemies.Length; i++)
+        {
+            // Let's simulate the fireball hitting an enemy
+            // Normally, this would be a trigger from a collision or something similar
+            StartCoroutine(SimulateFireballHit(i));
         }
     }
 
-    // This method is called when an enemy is killed
-    public void OnEnemyKilled(Enemy enemy)
+    private IEnumerator SimulateFireballHit(int enemyIndex)
     {
-        // Example: Increase the score by a fixed value, or you can have a custom score logic per enemy
-        int enemyScore = 10; // You can change this based on enemy type or other factors
-        score += enemyScore;
+        float startTime = Time.time;
+        
+        // Simulate the fireball hit and damage over time (just for testing)
+        Debug.Log("Firing at Enemy " + enemyIndex);
+        yield return new WaitForSeconds(1f);  // Simulate a delay before damage is applied
 
-        // Log the current score or update the UI with the new score
-        Debug.Log("Enemy killed! Current score: " + score);
+        // Assuming the enemy is destroyed after a certain amount of time
+        float timeTaken = Time.time - startTime;
+        enemyTimes[enemyIndex] = timeTaken;  // Store the time taken to kill the enemy
+        
+        // Print the time taken for debugging
+        Debug.Log("Enemy " + enemyIndex + " killed in: " + timeTaken + " seconds");
 
-        // Optionally, update the UI or trigger further game logic
-        // UIManager.instance.UpdateScore(score);
+        // Display the total time taken for all enemies (optional)
+        ShowTimes();
     }
 
-    public int GetScore()
+    void ShowTimes()
     {
-        return score;
+        Debug.Log("Showing Times: ");
+        for (int i = 0; i < enemyTimes.Length; i++)
+        {
+            Debug.Log("Enemy " + i + " took " + enemyTimes[i] + " seconds.");
+        }
     }
 }

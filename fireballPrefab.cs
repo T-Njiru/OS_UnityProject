@@ -1,5 +1,5 @@
 using UnityEngine;
-using System.Collections;  // Add this line for IEnumerator and coroutines
+using System.Collections;  // For IEnumerator and coroutines
 
 public class Projectile : MonoBehaviour
 {
@@ -34,6 +34,7 @@ public class Projectile : MonoBehaviour
     private void Start()
     {
         startPosition = transform.position; // Record the initial position
+        Debug.Log("Fireball initialized at position: " + startPosition);
     }
 
     private void Update()
@@ -43,67 +44,74 @@ public class Projectile : MonoBehaviour
         // Move the fireball forward
         float movementSpeed = speed * Time.deltaTime * direction;
         transform.Translate(movementSpeed, 0, 0);
+        Debug.Log("Fireball position: " + transform.position + ", Speed: " + movementSpeed);
 
-        // Handle fireball lifetime (optional: set a maximum lifetime to avoid infinite existence)
+        // Handle fireball lifetime
         lifetime += Time.deltaTime;
-        if (lifetime > 5f) gameObject.SetActive(false);
+        if (lifetime > 5f)
+        {
+            Debug.Log("Fireball lifetime exceeded. Deactivating.");
+            gameObject.SetActive(false);
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        // Debug to track what is colliding with the fireball
         Debug.Log("Fireball collided with: " + collision.gameObject.name + " (Tag: " + collision.tag + ")");
 
         if (hit) return;
 
         if (collision.CompareTag("Enemy"))
         {
-            Debug.Log("Fireball hit an enemy: " + collision.gameObject.name);  // Debugging when the fireball hits an enemy
+            Debug.Log("Fireball hit an enemy: " + collision.gameObject.name);
 
             hit = true;
-            boxCollider.enabled = false;  // Disable the collider once the fireball hits
+            boxCollider.enabled = false;
 
-            anim.SetTrigger("explode");  // Trigger the explosion animation
-            Debug.Log("Explosion animation triggered!");  // Debugging explosion trigger
+            anim.SetTrigger("explode");
+            Debug.Log("Explosion animation triggered!");
 
-            // Apply damage to the enemy
             Enemy enemy = collision.GetComponent<Enemy>();
             if (enemy != null)
             {
-                Debug.Log("Applying damage to enemy: " + enemy.name);  // Debugging damage application
-                enemy.TakeDamage(damage);  // Apply damage to the enemy
+                Debug.Log("Applying damage (" + damage + ") to enemy: " + enemy.name);
+                enemy.TakeDamage(damage);
             }
 
-            // Deactivate the fireball after the explosion animation is triggered
             StartCoroutine(DeactivateAfterExplosion());
         }
         else
         {
-            Debug.Log("Fireball hit something that's not an enemy: " + collision.gameObject.name);  // Debugging non-enemy collisions
+            Debug.Log("Fireball hit a non-enemy object: " + collision.gameObject.name);
         }
     }
 
-    // Coroutine to wait for the explosion animation to finish before deactivating the fireball
     private IEnumerator DeactivateAfterExplosion()
     {
-        // Wait for the explosion animation to finish (adjust time according to your animation length)
+        Debug.Log("Waiting for explosion animation to finish.");
         yield return new WaitForSeconds(anim.GetCurrentAnimatorStateInfo(0).length);
-
-        Debug.Log("Deactivating fireball after explosion");  // Debugging fireball deactivation
+        Debug.Log("Deactivating fireball after explosion animation.");
         gameObject.SetActive(false);
     }
 
     public void SetDirection(float _direction)
     {
+        Debug.Log("Setting direction for: " + gameObject.name);
+        
         lifetime = 0;
         direction = _direction;
-        gameObject.SetActive(true);
+        Debug.Log("Before activation: Fireball activeSelf: " + gameObject.activeSelf);
+        gameObject.SetActive(true); // Ensure the fireball is activated
+        Debug.Log("After activation: Fireball activeSelf: " + gameObject.activeSelf);
+        
         hit = false;
+
+        Debug.Log("Fireball activated with direction: " + _direction);
 
         if (anim == null)
         {
             Debug.LogError("Animator is null in SetDirection for " + gameObject.name);
-            return; // Stop execution if Animator is null
+            return;
         }
 
         boxCollider.enabled = true;
@@ -113,10 +121,12 @@ public class Projectile : MonoBehaviour
             localScaleX = -localScaleX;
 
         transform.localScale = new Vector3(localScaleX, transform.localScale.y, transform.localScale.z);
+        Debug.Log("Fireball scale updated for direction: " + transform.localScale);
     }
 
     private void Deactivate()
     {
+        Debug.Log("Deactivating fireball manually.");
         gameObject.SetActive(false);
     }
 }
